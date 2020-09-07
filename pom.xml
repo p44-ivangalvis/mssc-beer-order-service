@@ -19,7 +19,11 @@
     <description>MSSC Beer Order Service</description>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.21.Final</version>
+        </dependency>
     </dependencies>
 
 </project>
