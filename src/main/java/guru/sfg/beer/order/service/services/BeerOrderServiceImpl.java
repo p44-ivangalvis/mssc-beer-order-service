@@ -103,6 +103,7 @@ public class BeerOrderServiceImpl implements BeerOrderService {
 
     @Override
     public BeerOrderDto getOrderById(UUID customerId, UUID orderId) {
+        log.debug( "Getting order by id " + orderId + " and customer id " + customerId );
         return beerOrderMapper.beerOrderToDto(getOrder(customerId, orderId));
     }
 
