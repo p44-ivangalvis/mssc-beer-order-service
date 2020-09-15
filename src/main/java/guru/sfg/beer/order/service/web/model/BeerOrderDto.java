@@ -33,7 +33,7 @@ public class BeerOrderDto extends BaseItem {
 
     @Builder
     public BeerOrderDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate, UUID customerId, List<BeerOrderLineDto> beerOrderLines,
-                        OrderStatusEnum orderStatus, String orderStatusCallbackUrl, String customerRef) {
+                        String orderStatus, String orderStatusCallbackUrl, String customerRef) {
         super(id, version, createdDate, lastModifiedDate);
         this.customerId = customerId;
         this.beerOrderLines = beerOrderLines;
@@ -45,6 +45,8 @@ public class BeerOrderDto extends BaseItem {
     private UUID customerId;
     private String customerRef;
     private List<BeerOrderLineDto> beerOrderLines;
-    private OrderStatusEnum orderStatus;
+    /**Here we changed the orderStatus to became a String so thet the external enum will no longer be tied to the model
+     Due that it was calling the last enum instead of the new refactored one**/
+    private String orderStatus;
     private String orderStatusCallbackUrl;
 }
