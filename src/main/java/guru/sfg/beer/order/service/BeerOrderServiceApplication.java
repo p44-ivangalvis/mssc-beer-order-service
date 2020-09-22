@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.jms.artemis.ArtemisAutoConfigurati
 
 
 //this is a thing coming from JMS in the parent pom so this is generating some issues in the running of the service
-@SpringBootApplication(exclude = ArtemisAutoConfiguration.class )
+@SpringBootApplication//(exclude = ArtemisAutoConfiguration.class )
 public class BeerOrderServiceApplication {
 
     public static void main(String[] args) {
