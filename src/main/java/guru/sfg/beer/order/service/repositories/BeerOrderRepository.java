@@ -38,7 +38,8 @@ public interface BeerOrderRepository  extends JpaRepository<BeerOrder, UUID> {
     Page<BeerOrder> findAllByCustomer(Customer customer, Pageable pageable);
 
     List<BeerOrder> findAllByOrderStatus( BeerOrderStatusEnum beerOrderStatusEnum );
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    BeerOrder findOneById(UUID id);
+ /**We commented this because this method is maybe generating some kind of conflict there,
+  *  so is better to use the finde by id that returns an optional**/
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    BeerOrder findOneById(UUID id);
 }
