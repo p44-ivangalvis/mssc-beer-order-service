@@ -12,6 +12,15 @@ import org.springframework.jms.support.converter.MessageType;
 @Configuration
 public class JmsConfig
 {
+
+    public static final String VALIDATE_ORDER_QUEUE = "validate-order";
+    public static final String ALLOCATE_ORDER_QUEUE = "allocate-order";
+
+    public static final String VALIDATE_ORDER_RESPONSE_QUEUE = "validate-order-response";
+
+    public static final String ALLOCATE_ORDER_RESPONSE_QUEUE = "allocate-order-response";
+
+
     @Bean // Serialize message content to json using TextMessage
     //if we dont specify an object mapper to work with, this jackson converter will never use it, so it will fail to convert objects or deserialize them
     //this was the error Cannot construct instance of `java.time.OffsetDateTime` (no Creators, like default construct, exist): cannot deserialize from Object value (no delegate- or property-based Creator)
