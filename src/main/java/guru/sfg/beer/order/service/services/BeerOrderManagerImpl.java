@@ -111,15 +111,15 @@ public class BeerOrderManagerImpl
 
 
     @Override
-    public void processPickUpOrder( final BeerOrderDto beerOrderDto )
+    public void processPickUpOrder( final UUID beerOrderId )
     {
-        Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById( beerOrderDto.getId() );
+        Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById( beerOrderId );
 
         beerOrderOptional.ifPresentOrElse( beerOrder -> {
 
             sendBeerOrderEvent( beerOrder, BeerOrderEventEnum.BEERORDER_PICKED_UP );
 
-        }, () -> log.error( "Order not found in pickup. ID: " + beerOrderDto.getId() ));
+        }, () -> log.error( "Order not found in pickup. ID: " + beerOrderId ));
     }
 
 
