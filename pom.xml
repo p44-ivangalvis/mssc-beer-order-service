@@ -36,6 +36,25 @@
             <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--    This dependency is needed in order to enable service discovery with eureka for the beer service-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!--    Dependency to bring up the configuration of the cloud service that holds the beer service props-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <!--    The following dependency enables us to configure the loggings to be produced as JSON objects,
+        so that we can process them with zipkin using logback-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.3</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
