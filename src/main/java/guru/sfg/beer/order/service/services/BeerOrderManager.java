@@ -16,5 +16,7 @@ public interface BeerOrderManager
                                   Boolean hasAllocationErrors,
                                   Boolean hasPendingInventory );
 
-    void processPickUpOrder( UUID beerOrderDto);
+    void processPickUpOrder( UUID beerOrderDtoId );
+
+    void processCancelOrder( UUID beerOrderDtoId );
 }
