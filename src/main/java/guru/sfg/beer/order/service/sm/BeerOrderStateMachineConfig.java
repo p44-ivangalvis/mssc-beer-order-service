@@ -26,6 +26,12 @@ public class BeerOrderStateMachineConfig
     /**if we want spring to inject those beans by name we need to ensure that **/
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> allocateOrderAction;
 
+    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  validationFailureAction;
+
+    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  allocationFailureAction;
+
+    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  deallocateOrderAction;
+
 
     @Override
     public void configure( StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states )
@@ -38,6 +44,7 @@ public class BeerOrderStateMachineConfig
               .end( BeerOrderStatusEnum.DELIVERED )
               .end( BeerOrderStatusEnum.DELIVERY_EXCEPTION )
               .end( BeerOrderStatusEnum.VALIDATION_EXCEPTION )
+              .end(BeerOrderStatusEnum.CANCELLED)
               .end( BeerOrderStatusEnum.ALLOCATION_EXCEPTION );
     }
 
@@ -49,17 +56,31 @@ public class BeerOrderStateMachineConfig
         transitions.withExternal().source( BeerOrderStatusEnum.NEW ).target( BeerOrderStatusEnum.PENDING_VALIDATION )
                    .event( BeerOrderEventEnum.VALIDATE_ORDER )
                    .action( validateOrderAction )
+                   .and().withExternal()
+                   .source(BeerOrderStatusEnum.PENDING_VALIDATION).target(BeerOrderStatusEnum.CANCELLED)
+                   .event(BeerOrderEventEnum.CANCEL_ORDER)
+                   .action( deallocateOrderAction )
                    .and()
                    .withExternal().source( BeerOrderStatusEnum.PENDING_VALIDATION ).target( BeerOrderStatusEnum.VALIDATED )
                    .event( BeerOrderEventEnum.VALIDATION_PASSED )
                    .and()
                    .withExternal().source( BeerOrderStatusEnum.NEW ).target( BeerOrderStatusEnum.VALIDATION_EXCEPTION )
                    .event( BeerOrderEventEnum.VALIDATION_FAILED )
+                   .action(validationFailureAction)
+                   .and()
+                   .withExternal().source(BeerOrderStatusEnum.VALIDATED).target(BeerOrderStatusEnum.CANCELLED)
+                   .event(BeerOrderEventEnum.CANCEL_ORDER)
+                   .action( deallocateOrderAction )
                    .and()
                    .withExternal()
                    .source( BeerOrderStatusEnum.VALIDATED ).target( BeerOrderStatusEnum.ALLOCATION_PENDING )
                    .event( BeerOrderEventEnum.ALLOCATE_ORDER )
                    .action( allocateOrderAction )
+                   .and()
+                   .withExternal()
+                   .source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.CANCELLED)
+                   .event(BeerOrderEventEnum.CANCEL_ORDER)
+                   .action( deallocateOrderAction )
                    .and()
                    .withExternal()
                    .source( BeerOrderStatusEnum.ALLOCATION_PENDING ).target( BeerOrderStatusEnum.ALLOCATED )
@@ -68,6 +89,7 @@ public class BeerOrderStateMachineConfig
                    .withExternal()
                    .source( BeerOrderStatusEnum.ALLOCATION_PENDING ).target( BeerOrderStatusEnum.ALLOCATION_EXCEPTION )
                    .event( BeerOrderEventEnum.ALLOCATION_FAILED )
+                   .action(allocationFailureAction)
                    .and()
                    .withExternal()
                    .source( BeerOrderStatusEnum.ALLOCATION_PENDING ).target( BeerOrderStatusEnum.ALLOCATION_PENDING )
@@ -75,7 +97,11 @@ public class BeerOrderStateMachineConfig
                    .and()
                    .withExternal()
                    .source( BeerOrderStatusEnum.ALLOCATED ).target( BeerOrderStatusEnum.PICKED_UP )
-                   .event( BeerOrderEventEnum.BEERORDER_PICKED_UP );
+                   .event( BeerOrderEventEnum.BEERORDER_PICKED_UP )
+                   .and().withExternal()
+                   .source(BeerOrderStatusEnum.ALLOCATED).target(BeerOrderStatusEnum.CANCELLED)
+                   .event(BeerOrderEventEnum.CANCEL_ORDER)
+                   .action( deallocateOrderAction );
 
     }
 }
